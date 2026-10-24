@@ -1,11 +1,11 @@
 workflows:
-  ios-workflow:
-    name: iOS Build Workflow
+  android-workflow:
+    name: Android Build Workflow
     max_build_duration: 120
-    instance_type: mac_mini_m2
+    instance_type: linux_x2
     environment:
       node: 18.x
-      xcode: latest
+      java: 17
     scripts:
       - name: Install dependencies
         script: |
@@ -13,19 +13,13 @@ workflows:
       - name: Build web assets
         script: |
           npm run build
-      - name: Add and Sync Capacitor iOS
+      - name: Add and Sync Capacitor Android
         script: |
-          npx cap add ios || true
-          npx cap sync ios
-      - name: Build iOS Xcode Project
+          npx cap add android || true
+          npx cap sync android
+      - name: Build Android APK
         script: |
-          cd ios/App
-          xcodebuild -workspace App.xcworkspace \
-                     -scheme App \
-                     -configuration Release \
-                     -sdk iphoneos \
-                     CODE_SIGNING_ALLOWED=NO \
-                     CODE_SIGNING_REQUIRED=NO \
-                     clean build
+          cd android
+          ./gradlew assembleDebug
     artifacts:
-      - ios/App/build/Release-iphoneos/*.app
+      - android/app/build/outputs/**/*.apk
