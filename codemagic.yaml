@@ -13,20 +13,19 @@ workflows:
       - name: Build web assets
         script: |
           npm run build
-      - name: Sync Capacitor iOS
+      - name: Add and Sync Capacitor iOS
         script: |
+          npx cap add ios || true
           npx cap sync ios
       - name: Build iOS Xcode Project
         script: |
-          xcodebuild -workspace ios/App/App.xcworkspace \
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace \
                      -scheme App \
                      -configuration Release \
-                     -derivedDataPath build \
-                     CODE_SIGN_IDENTITY="" \
-                     CODE_SIGNING_REQUIRED=NO \
-                     CODE_SIGNING_ALLOWED=NO \
                      -sdk iphoneos \
+                     CODE_SIGNING_ALLOWED=NO \
+                     CODE_SIGNING_REQUIRED=NO \
                      clean build
     artifacts:
-      - build/Build/Products/Release-iphoneos/*.app
-      - ios/App/build/outputs/**/*.ipa
+      - ios/App/build/Release-iphoneos/*.app
