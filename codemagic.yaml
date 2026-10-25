@@ -46,23 +46,15 @@ workflows:
           npm install @capacitor/ios
           npx cap add ios || true
           npx cap sync ios
-      - name: Install CocoaPods Safely
-        script: |
-          if [ -d "ios/App" ] && [ -f "ios/App/Podfile" ]; then
-            cd ios/App
-            pod install
-          fi
-      - name: Build Unsigned iOS App (Simulator/Debug)
+      - name: Build Unsigned iOS App
         script: |
           xcodebuild \
             -workspace ios/App/App.xcworkspace \
             -scheme App \
+            -sdk iphonesimulator \
             -configuration Debug \
-            -destination 'generic/platform=iOS Simulator' \
-            -derivedDataPath ios/build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            clean build
+            CODE_SIGNING_ALLOWED=NO
     artifacts:
-      - ios/build/Build/Products/Debug-iphonesimulator/*.app
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/Products/Debug-iphonesimulator/*.app
