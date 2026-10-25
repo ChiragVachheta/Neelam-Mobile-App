@@ -46,10 +46,17 @@ workflows:
           npm install @capacitor/ios
           npx cap add ios || true
           npx cap sync ios
-      - name: Install CocoaPods
+      - name: Install CocoaPods Safely
         script: |
-          cd ios/App
-          pod install
+          if [ -d "ios/App" ] && [ -f "ios/App/Podfile" ]; then
+            cd ios/App
+            pod install
+          elif [ -d "ios" ] && [ -f "ios/Podfile" ]; then
+            cd ios
+            pod install
+          else
+            echo "No Podfile found, skipping pod install."
+          fi
       - name: Build Unsigned iOS App (Simulator/Debug)
         script: |
           xcodebuild \
