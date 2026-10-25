@@ -2,7 +2,10 @@ import { Phone, Sparkles } from 'lucide-react';
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-purple-100">
+    <header 
+      className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-purple-100"
+      style={{ paddingTop: 'env(safe-area-inset-top)' }}
+    >
       <div className="mx-auto max-w-5xl px-4 sm:px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="relative">
