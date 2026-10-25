@@ -51,11 +51,6 @@ workflows:
           if [ -d "ios/App" ] && [ -f "ios/App/Podfile" ]; then
             cd ios/App
             pod install
-          elif [ -d "ios" ] && [ -f "ios/Podfile" ]; then
-            cd ios
-            pod install
-          else
-            echo "No Podfile found, skipping pod install."
           fi
       - name: Build Unsigned iOS App (Simulator/Debug)
         script: |
@@ -63,11 +58,11 @@ workflows:
             -workspace ios/App/App.xcworkspace \
             -scheme App \
             -configuration Debug \
-            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath ios/build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            build
+            clean build
     artifacts:
-      - build/ios/iphonesimulator/*.app
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/Products/Debug-iphonesimulator/*.app
+      - ios/build/Build/Products/Debug-iphonesimulator/*.app
