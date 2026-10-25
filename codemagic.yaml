@@ -49,12 +49,14 @@ workflows:
       - name: Build Unsigned iOS App
         script: |
           xcodebuild \
-            -workspace ios/App/App.xcworkspace \
+            -workspace ./ios/App/App.xcworkspace \
             -scheme App \
             -sdk iphonesimulator \
             -configuration Debug \
+            -derivedDataPath ./build/ios \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            build
     artifacts:
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/Products/Debug-iphonesimulator/*.app
+      - build/ios/Build/Products/Debug-iphonesimulator/*.app
